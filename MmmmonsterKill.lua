@@ -114,35 +114,18 @@ function addon:PLAYER_DEAD()
 	killingStreak = 0
 end
 
-local dispatch = function(eventType, sourceFlags, destFlags)
+function addon:PARTY_KILL(sourceFlags, destFlags)
+    --print(sourceFlags, destFlags)
+    --if hasFlag(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) and hasFlag(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) then
+    if(true) then
+        print(sourceFlags, destFlags)
+        addon:Trigger()
+    end
+end
+
+function addon:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlasgs)
     if(eventType=='PARTY_KILL') then
-        --print(sourceFlags, destFlags)
-        if hasFlag(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) and hasFlag(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) then
-            addon:Trigger()
-        end
+        self:PARTY_KILL(sourceFlags, destFlags)
     end
 end
-
-
-local TOC = select(4, GetBuildInfo())
-
-local CLUE
-
-if TOC < 40100 then
-    CLUE = function(self, event, timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags)
-        dispatch(eventType, sourceFlags, destFlags)
-    end
-elseif TOC == 40100 then
-    CLUE = function(self, event, timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags)
-        dispatch(eventType, sourceFlags, destFlags)
-    end
-else--if TOC >= 40200 then
-    CLUE = function(self, event, timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlasgs)
-        dispatch(eventType, sourceFlags, destFlags)
-    end
-end
-
-
-
-addon.COMBAT_LOG_EVENT_UNFILTERED = CLUE
 
