@@ -116,8 +116,7 @@ end
 
 function addon:PARTY_KILL(sourceFlags, destFlags)
     --print(sourceFlags, destFlags)
-    --if hasFlag(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) and hasFlag(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) then
-    if(true) then
+    if hasFlag(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) and hasFlag(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) then
         print(sourceFlags, destFlags)
         addon:Trigger()
     end
