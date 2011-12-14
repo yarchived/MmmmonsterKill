@@ -115,16 +115,14 @@ function addon:PLAYER_DEAD()
 end
 
 function addon:PARTY_KILL(sourceFlags, destFlags)
-    --print(sourceFlags, destFlags)
     if hasFlag(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) and hasFlag(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) then
-        print(sourceFlags, destFlags)
-        addon:Trigger()
+        return addon:Trigger()
     end
 end
 
 function addon:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlasgs)
     if(eventType=='PARTY_KILL') then
-        self:PARTY_KILL(sourceFlags, destFlags)
+        return self:PARTY_KILL(sourceFlags, destFlags)
     end
 end
 
