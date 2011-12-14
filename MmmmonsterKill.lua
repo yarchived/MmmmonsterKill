@@ -26,31 +26,31 @@ THE SOFTWARE.
 local debugf = tekDebug and tekDebug:GetFrame('MmmmonsterKill')
 local debug
 if debugf then
-	debug = function(...) debugf:AddMessage(string.join(', ', tostringall(...))) end
+    debug = function(...) debugf:AddMessage(string.join(', ', tostringall(...))) end
 else
-	debug = function() end
+    debug = function() end
 end
 
 local PATH = [[Interface\AddOns\MmmmonsterKill\sounds\%s.mp3]]
 
 local spreeSounds = {
-	[1] = 'First_Blood',
-	[2] = 'Killing_Spree',
-	[3] = 'Dominating',
-	[4] = 'Mega_Kill',
-	[5] = 'Unstoppable',
-	[6] = 'Wicked_Sick',
-	[7] = 'Monster_Kill',
-	[8] = 'Ludicrous_Kill',
-	[9] = 'God_Like',
-	[10] = 'Holy_Shit',
+    [1] = 'First_Blood',
+    [2] = 'Killing_Spree',
+    [3] = 'Dominating',
+    [4] = 'Mega_Kill',
+    [5] = 'Unstoppable',
+    [6] = 'Wicked_Sick',
+    [7] = 'Monster_Kill',
+    [8] = 'Ludicrous_Kill',
+    [9] = 'God_Like',
+    [10] = 'Holy_Shit',
 }
 
 local multiSounds = {
-	[2] = 'Double_Kill',
-	[3] = 'Triple_Kill',
-	[4] = 'Ultra_Kill',
-	[5] = 'Rampage',
+    [2] = 'Double_Kill',
+    [3] = 'Triple_Kill',
+    [4] = 'Ultra_Kill',
+    [5] = 'Rampage',
 }
 
 local spreeMAX = 10
@@ -67,9 +67,8 @@ local spreeSound
 local bit_band = bit.band
 
 local function hasFlag(flags, flag)
-	return bit_band(flags, flag) == flag
+    return bit_band(flags, flag) == flag
 end
-
 
 local addon = CreateFrame('Frame', 'MmmmonsterKill')
 addon:SetScript('OnEvent', function(self, event, ...) self[event](self, event, ...) end)
@@ -77,27 +76,27 @@ addon:RegisterEvent'COMBAT_LOG_EVENT_UNFILTERED'
 addon:RegisterEvent'PLAYER_DEAD'
 
 function addon:PlaySound(file)
-	PlaySoundFile(format(PATH, file))
+    PlaySoundFile(format(PATH, file))
 end
 
 local total = 0
 function addon:OnUpdate(elps)
-	total = total + elps
-	if total >= 2 then
-		self:PlaySound(spreeSound)
-		self:SetScript('OnUpdate', nil)
-	end
+    total = total + elps
+    if total >= 2 then
+        self:PlaySound(spreeSound)
+        self:SetScript('OnUpdate', nil)
+    end
 end
 
 function addon:Trigger()
-	local now = GetTime()
-	
-	multiKill = (lastKillTime + MULTI_KILL_HOLD_TIME > now) and (multiKill + 1) or 1
-	lastKillTime = now
-	killingStreak = killingStreak + 1
-	
-	multiSound = multiSounds[min(multiMAX, multiKill)]
-	spreeSound = spreeSounds[min(spreeMAX, killingStreak)]
+    local now = GetTime()
+
+    multiKill = (lastKillTime + MULTI_KILL_HOLD_TIME > now) and (multiKill + 1) or 1
+    lastKillTime = now
+    killingStreak = killingStreak + 1
+
+    multiSound = multiSounds[min(multiMAX, multiKill)]
+    spreeSound = spreeSounds[min(spreeMAX, killingStreak)]
 
     self:PlaySound(multiSound or spreeSound)
     if(multiSound) then
@@ -106,9 +105,8 @@ function addon:Trigger()
     end
 end
 
-
 function addon:PLAYER_DEAD()
-	killingStreak = 0
+    killingStreak = 0
 end
 
 function addon:PARTY_KILL(sourceFlags, destFlags)
