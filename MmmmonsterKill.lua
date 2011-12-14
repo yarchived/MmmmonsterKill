@@ -85,7 +85,6 @@ function addon:OnUpdate(elps)
 	total = total + elps
 	if total >= 2 then
 		self:PlaySound(spreeSound)
-		total = 0
 		self:SetScript('OnUpdate', nil)
 	end
 end
@@ -99,14 +98,12 @@ function addon:Trigger()
 	
 	multiSound = multiSounds[min(multiMAX, multiKill)]
 	spreeSound = spreeSounds[min(spreeMAX, killingStreak)]
-	if multiSound then
-		self:PlaySound(multiSound)
-		if spreeSound then
-			self:SetScript('OnUpdate', self.OnUpdate)
-		end
-	elseif spreeSound then
-		self:PlaySound(spreeSound)
-	end
+
+    self:PlaySound(multiSound or spreeSound)
+    if(multiSound) then
+        total = 0
+        self:SetScript('OnUpdate', self.OnUpdate)
+    end
 end
 
 
